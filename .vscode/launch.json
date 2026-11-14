@@ -1,0 +1,57 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug STM32F407 (J-Link / SWD)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "jlink",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build (Python, no CMake)",
+      "executable": "${workspaceFolder}/build/direct/stm32f407-blink.elf",
+      "device": "STM32F407VG",
+      "interface": "swd",
+      "gdbPath": "arm-none-eabi-gdb",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      }
+    },
+    {
+      "name": "Debug STM32F407 (ST-Link / OpenOCD)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build (Python, no CMake)",
+      "executable": "${workspaceFolder}/build/direct/stm32f407-blink.elf",
+      "device": "STM32F407VG",
+      "interface": "swd",
+      "configFiles": [
+        "${workspaceFolder}/openocd.cfg"
+      ],
+      "gdbPath": "arm-none-eabi-gdb",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none"
+    },
+    {
+      "name": "Debug STM32F407 (J-Link via OpenOCD, fallback)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build (Python, no CMake)",
+      "executable": "${workspaceFolder}/build/direct/stm32f407-blink.elf",
+      "device": "STM32F407VG",
+      "interface": "swd",
+      "configFiles": [
+        "${workspaceFolder}/openocd-jlink.cfg"
+      ],
+      "gdbPath": "arm-none-eabi-gdb",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none"
+    }
+  ]
+}

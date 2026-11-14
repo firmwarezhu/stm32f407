@@ -1,0 +1,23 @@
+{
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/compile_commands.json",
+  "cmake.sourceDirectory": "${workspaceFolder}",
+  "cmake.configureOnOpen": false,
+  "cmake.generator": "Ninja",
+  "files.associations": {
+    "*.ld": "linkerscript",
+    "*.s": "asm",
+    "*.S": "asm"
+  },
+  "files.exclude": {
+    "build/": false
+  },
+  "search.exclude": {
+    "build/": true
+  },
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 4,
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}"
+  ]
+}

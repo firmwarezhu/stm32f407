@@ -1,0 +1,22 @@
+# CMake toolchain file for bare-metal ARM (Cortex-M4F).
+# Requires arm-none-eabi-gcc on PATH. Override with ARM_TOOLCHAIN_PREFIX if needed.
+
+set(CMAKE_SYSTEM_NAME       Generic)
+set(CMAKE_SYSTEM_PROCESSOR  arm)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+
+if(NOT DEFINED ARM_TOOLCHAIN_PREFIX)
+    set(ARM_TOOLCHAIN_PREFIX "arm-none-eabi-")
+endif()
+
+set(CMAKE_C_COMPILER    ${ARM_TOOLCHAIN_PREFIX}gcc)
+set(CMAKE_ASM_COMPILER  ${ARM_TOOLCHAIN_PREFIX}gcc)
+set(CMAKE_OBJCOPY       ${ARM_TOOLCHAIN_PREFIX}objcopy)
+set(CMAKE_SIZE          ${ARM_TOOLCHAIN_PREFIX}size)
+set(CMAKE_GDB           ${ARM_TOOLCHAIN_PREFIX}gdb)
+
+# Don't try to link a test executable during compiler detection.
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)

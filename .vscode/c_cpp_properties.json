@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "name": "STM32F407 (arm-none-eabi-gcc)",
+      "includePath": [
+        "${workspaceFolder}/inc",
+        "${workspaceFolder}/src"
+      ],
+      "defines": [
+        "STM32F407XX",
+        "HSE_VALUE=8000000",
+        "__GNUC__"
+      ],
+      "compilerPath": "arm-none-eabi-gcc",
+      "cStandard": "gnu11",
+      "intelliSenseMode": "gcc-arm",
+      "compileCommands": "${workspaceFolder}/compile_commands.json"
+    }
+  ],
+  "version": 4
+}

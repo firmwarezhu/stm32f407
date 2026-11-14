@@ -1,0 +1,84 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build (Python, no CMake)",
+      "type": "shell",
+      "command": "python",
+      "args": ["tools/build.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"],
+      "detail": "Fast path: needs only Python + arm-none-eabi-gcc"
+    },
+    {
+      "label": "CMake: configure (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--preset", "debug"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: build (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "debug"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Flash: J-Link (HEX)",
+      "type": "shell",
+      "command": "JLink",
+      "args": [
+        "-device", "STM32F407VG",
+        "-if", "SWD",
+        "-speed", "4000",
+        "-CommanderScript", "tools/flash.jlink"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "dependsOn": ["Build (Python, no CMake)"],
+      "detail": "Preferred: native J-Link, no WinUSB/Zadig driver needed"
+    },
+    {
+      "label": "Flash: OpenOCD (ELF)",
+      "type": "shell",
+      "command": "openocd",
+      "args": [
+        "-f", "openocd.cfg",
+        "-c", "program build/direct/stm32f407-blink.elf verify reset exit"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "dependsOn": ["Build (Python, no CMake)"]
+    },
+    {
+      "label": "Flash: st-flash (BIN)",
+      "type": "shell",
+      "command": "st-flash",
+      "args": ["write", "build/direct/stm32f407-blink.bin", "0x08000000"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "dependsOn": ["Build (Python, no CMake)"]
+    },
+    {
+      "label": "Size report",
+      "type": "shell",
+      "command": "arm-none-eabi-size",
+      "args": ["build/direct/stm32f407-blink.elf"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "python",
+      "args": ["tools/build.py", "--clean"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    }
+  ]
+}

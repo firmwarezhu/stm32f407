@@ -1,0 +1,9 @@
+device STM32F407VG
+si SWD
+speed 4000
+connect
+h
+loadfile build/direct/stm32f407-blink.hex
+r
+g
+exit
