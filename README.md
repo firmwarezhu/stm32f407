@@ -279,11 +279,29 @@ git add -A && git commit -m "feat: ..."
 git log --oneline
 ```
 
-**接远程仓库**（按需，先在 GitHub/GitLab 建空仓库，不要勾选初始化 README）：
+**远程仓库**：<https://github.com/firmwarezhu/stm32f407>，默认分支 `main`，已建立 `main -> origin/main` 跟踪。
 
 ```bash
-git remote add origin <your-repo-url>
-git push -u origin main
+git remote -v
+git push                       # 已跟踪，直接推
+git pull --rebase              # 拉取远端改动
 ```
 
+**网络说明（本机特有）**：`.git/config` 里 `remote.origin.url` 是 HTTPS 地址，但本机代理拦截 `github.com:443`（直连 DNS 也被污染），HTTPS 推送会报 `CONNECT tunnel failed, response 502`。因此加了一条**仅作用于本仓库、且只匹配自己账号**的 URL 重写，把 HTTPS 透明改走 GitHub 官方的 SSH-over-443 通道：
+
+```bash
+git config --local --get-regexp '^url\.'
+# url.ssh://git@ssh.github.com:443/firmwarezhu/.insteadof https://github.com/firmwarezhu/
+```
+
+所以 `git remote -v` 显示的是重写后的 `ssh://git@ssh.github.com:443/...`。前提是本机 SSH 公钥已加到 GitHub 账号（`ssh -T -p 443 git@ssh.github.com` 应返回 `Hi firmwarezhu!`）；`~/.ssh/config` 里也已有 `Host github.com -> ssh.github.com:443` 的映射。
+
+**换机器 / 网络恢复后**不需要这条重写，直接用标准 HTTPS 即可；想在本机去掉它：
+
+```bash
+git config --local --unset-all 'url.ssh://git@ssh.github.com:443/firmwarezhu/.insteadOf'
+```
+
+> 该重写是仓库本地配置，**不会随 clone 传播**，也不会影响其他 GitHub 仓库。
+>
 > 建议按「一个功能一次提交」的粒度推进，例如换板级引脚、加 UART 驱动、加中断处理各成一次提交，方便回头对比启动链路的每一步改动。
