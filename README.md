@@ -245,3 +245,41 @@ Cursor 里用 `Ctrl+Shift+P > Tasks: Run Task`，选 **`Flash: J-Link (HEX)`**�
 - ST AN2606 — STM32 系统存储器 bootloader
 - `STMicroelectronics/cmsis_device_f4` — `Source/Templates/gcc/startup_stm32f407xx.s`（向量表）
 - Arm GNU Toolchain / newlib（`--specs=nano.specs`、`--specs=nosys.specs`）
+
+---
+
+## 11. 版本管理（Git）
+
+仓库根目录就是**本工程目录**：
+
+```
+C:\Users\firmw\WorkBuddy\2026-11-13-21-45-14\stm32f407-baremetal\
+```
+
+默认分支 `main`。工作区根目录下那张信息图 PNG、`.zip` 归档和安装日志**不在这个仓库里**，它们是独立的交付物。
+
+**忽略策略**：`build/`、所有编译产物（`*.elf` / `*.hex` / `*.bin` / `*.map` / `*.o`）、`compile_commands.json`、CMake/Ninja 生成物、J-Link 运行时日志、编辑器临时文件都不入库。也就是说**提交的是源码与配置，产物随时可重建**：
+
+```bash
+python tools/build.py          # 重新生成 build/direct/*
+cmake --preset debug && cmake --build --preset debug
+```
+
+`.gitattributes` 把源码/配置固定为 LF（本机 Git 系统级 `core.autocrlf=true`，不锁会出现整文件换行 diff），仅 `.ps1` 用 CRLF。
+
+**日常流程**
+
+```bash
+git status
+git add -A && git commit -m "feat: ..."
+git log --oneline
+```
+
+**接远程仓库**（按需，先在 GitHub/GitLab 建空仓库，不要勾选初始化 README）：
+
+```bash
+git remote add origin <your-repo-url>
+git push -u origin main
+```
+
+> 建议按「一个功能一次提交」的粒度推进，例如换板级引脚、加 UART 驱动、加中断处理各成一次提交，方便回头对比启动链路的每一步改动。
