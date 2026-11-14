@@ -51,12 +51,12 @@ SWD 接线（J-Link 标准 20-pin ARM 接头）：
 ## 2. 目录结构
 
 ```
-stm32f407-baremetal/
+D:\projects\stm32\f407\             ← 仓库根目录（直接用 Cursor 打开这一层）
 ├── .vscode/                  Cursor / VS Code 配置
 │   ├── c_cpp_properties.json  IntelliSense（ARM GCC + compile_commands）
 │   ├── settings.json
 │   ├── tasks.json             构建 / 烧录 / size / clean
-│   ├── launch.json            Cortex-Debug（OpenOCD + ST-Link）
+│   ├── launch.json            Cortex-Debug（默认 J-Link / SWD，另含 OpenOCD 备选）
 │   └── extensions.json        推荐扩展
 ├── cmake/arm-none-eabi-gcc.cmake   交叉编译工具链文件
 ├── CMakeLists.txt / CMakePresets.json
@@ -125,11 +125,13 @@ openocd --version
 ## 4. 用 Cursor 打开
 
 ```bash
-cd C:/Users/firmw/WorkBuddy/2026-11-13-21-45-14
-cursor stm32f407-baremetal
+cd D:/projects/stm32
+cursor f407
 ```
 
-或在 Cursor 里 `File > Open Folder...` 选择 `stm32f407-baremetal` 目录（**必须打开这个子目录**，否则 `${workspaceFolder}` 会指错位置）。
+或在 Cursor 里 `File > Open Folder...` 选择 `D:\projects\stm32\f407`（**必须直接打开仓库根目录这一层**，否则 `${workspaceFolder}` 会指错位置，构建/调试任务里的相对路径都会失效）。
+
+也可以在任意终端里直接用绝对路径打开：`cursor D:/projects/stm32/f407`。
 
 ---
 
@@ -253,10 +255,12 @@ Cursor 里用 `Ctrl+Shift+P > Tasks: Run Task`，选 **`Flash: J-Link (HEX)`**�
 仓库根目录就是**本工程目录**：
 
 ```
-C:\Users\firmw\WorkBuddy\2026-11-13-21-45-14\stm32f407-baremetal\
+D:\projects\stm32\f407\
 ```
 
-默认分支 `main`。工作区根目录下那张信息图 PNG、`.zip` 归档和安装日志**不在这个仓库里**，它们是独立的交付物。
+Git 仓库是可整体搬移的：`.git` 里没有绝对路径绑定，换目录/换盘后提交历史、`main` 分支、本地配置（`core.autocrlf false`）全部保留。
+
+默认分支 `main`。启动流程信息图 PNG、`.zip` 归档和工具链安装日志仍留在 WorkBuddy 工作区，**不在这个仓库里**，它们是独立的交付物。
 
 **忽略策略**：`build/`、所有编译产物（`*.elf` / `*.hex` / `*.bin` / `*.map` / `*.o`）、`compile_commands.json`、CMake/Ninja 生成物、J-Link 运行时日志、编辑器临时文件都不入库。也就是说**提交的是源码与配置，产物随时可重建**：
 
